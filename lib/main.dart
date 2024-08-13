@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finances/config/colors.dart';
+import 'package:flutter_finances/pages/AddEntry/add_entry.dart';
+import 'package:flutter_finances/pages/App/app.dart';
 import 'package:flutter_finances/pages/Home/home.dart';
 
 void main() {
@@ -42,7 +44,11 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w400),
         ),
       ),
-      home: HomeScreen(),
+      home: App(),
+      routes: {
+        '/home': (context) => HomeScreen(),
+        '/addEntry': (context) => AddEntryScreen(),
+      },
     );
   }
 }
