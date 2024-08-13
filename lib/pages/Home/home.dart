@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_finances/config/colors.dart';
+import 'package:flutter_finances/config/entries_collection.dart';
 import 'package:flutter_finances/config/month_data_collection.dart';
 import 'package:flutter_finances/pages/Home/widgets/EntryListItem/entry_list_item.dart';
 import 'package:flutter_finances/pages/Home/widgets/MonthDataCard/month_data_card.dart';
@@ -50,9 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: MonthDataCard(
-                      type: data.type,
-                      value: data.value,
-                      date: data.date,
+                      monthData: data,
                     ),
                   );
                 }).toList(), // Converte o resultado do map para uma lista de widgets
@@ -76,14 +75,16 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-                child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
+                child: ListView(
+                  key: UniqueKey(),
+                  children: EntryCollection().getEntries.map((item) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: EntryListItem(),
+                      child: EntryListItem(
+                        entry: item,
+                      ),
                     );
-                  },
+                  }).toList(),
                 ),
               ),
             ),

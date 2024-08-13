@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finances/config/colors.dart';
 import 'package:flutter_finances/config/custom_month_colors_collection.dart';
+import 'package:flutter_finances/models/month_data.dart';
 import 'package:flutter_finances/utils/masks.dart';
 
 class MonthDataCard extends StatelessWidget {
-  const MonthDataCard(
-      {super.key, required this.type, required this.value, required this.date});
+  const MonthDataCard({super.key, required this.monthData});
 
-  final String type;
-  final int value;
-  final String date;
+  final MonthData monthData;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +27,11 @@ class MonthDataCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  type,
+                  monthData.type,
                   style: TextStyle(fontSize: 14, color: CustomColors().title),
                 ),
                 MonthIcon(
-                  type: type,
+                  type: monthData.type,
                 )
               ],
             ),
@@ -41,11 +39,11 @@ class MonthDataCard extends StatelessWidget {
               height: 50,
             ),
             Text(
-              Masks().formatValueToCurrency(value),
+              Masks().formatValueToCurrency(monthData.value),
               style: TextStyle(color: CustomColors().title, fontSize: 26),
             ),
             Text(
-              "Última entrada dia $date",
+              "Última entrada dia ${monthData.date}",
               style: TextStyle(color: CustomColors().text, fontSize: 12),
             ),
           ],

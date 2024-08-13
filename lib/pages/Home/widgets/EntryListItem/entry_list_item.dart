@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finances/config/colors.dart';
+import 'package:flutter_finances/models/entry.dart';
+import 'package:flutter_finances/utils/masks.dart';
 
 class EntryListItem extends StatelessWidget {
-  const EntryListItem({super.key});
+  const EntryListItem({super.key, required this.entry});
+
+  final Entry entry;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +27,16 @@ class EntryListItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Desenvolvimento de site",
+                  entry.title,
                   style: TextStyle(fontSize: 14, color: CustomColors().title),
                 ),
                 Text(
-                  "R\$ 12.400,00",
-                  style: TextStyle(color: CustomColors().green, fontSize: 20),
+                  Masks().formatValueToCurrency(entry.value),
+                  style: TextStyle(
+                      color: entry.type == 'income'
+                          ? CustomColors().green
+                          : CustomColors().red,
+                      fontSize: 20),
                 ),
               ],
             ),
@@ -38,18 +46,21 @@ class EntryListItem extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      Icons.attach_money,
+                      entry.icon,
                       color: CustomColors().text,
                     ),
+                    SizedBox(
+                      width: 4,
+                    ),
                     Text(
-                      "Vendas",
+                      entry.category,
                       style:
                           TextStyle(color: CustomColors().text, fontSize: 14),
                     ),
                   ],
                 ),
                 Text(
-                  "13/4/2020",
+                  entry.date,
                   style: TextStyle(color: CustomColors().text, fontSize: 14),
                 ),
               ],
