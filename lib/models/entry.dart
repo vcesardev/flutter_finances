@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class Entry {
   String title;
-  int value;
-  String category;
-  String date;
-  String type;
-  IconData icon;
+  String price;
+  String transactionCategory;
+  DateTime date;
+  String transactionType;
+  String id;
 
   Entry(
       {required this.title,
-      required this.value,
-      required this.category,
+      required this.price,
+      required this.transactionCategory,
       required this.date,
-      required this.icon,
-      required this.type});
+      required this.transactionType,
+      required this.id});
 }

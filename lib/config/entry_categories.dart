@@ -14,7 +14,7 @@ class EntryCategoriesCollection {
       ),
     ),
     DropdownMenuItem(
-      value: 'alimentação',
+      value: 'alimentacao',
       child: Row(
         children: <Widget>[
           Icon(Icons.restaurant, color: CustomColors().text),
@@ -34,7 +34,7 @@ class EntryCategoriesCollection {
       ),
     ),
     DropdownMenuItem(
-      value: 'festas',
+      value: 'entretenimento',
       child: Row(
         children: <Widget>[
           Icon(Icons.celebration, color: CustomColors().text),

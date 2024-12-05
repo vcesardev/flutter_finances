@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_finances/config/colors.dart';
-import 'package:flutter_finances/config/custom_month_colors_collection.dart';
 import 'package:flutter_finances/config/entry_categories.dart';
 import 'package:flutter_finances/models/entry_payload.dart';
 import 'package:flutter_finances/pages/AddEntry/widgets/Input/input.dart';
-import 'package:flutter_finances/utils/masks.dart';
+import 'package:flutter_finances/pages/AddEntry/widgets/TransactionTypes/transaction_types.dart';
+import 'package:flutter_finances/services/entries.dart';
 
 class AddEntryScreen extends StatefulWidget {
   const AddEntryScreen({super.key});
@@ -35,29 +34,41 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
       SnackBar(
         content: Text(message),
         duration: Duration(seconds: 2),
+        backgroundColor: CustomColors().red,
+      ),
+    );
+  }
+
+  void displayToast(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
         backgroundColor: CustomColors().blue,
       ),
     );
   }
 
+  void onPressTransactionCategory(String type) {
+    setState(() {
+      _transactionType = type;
+    });
+  }
+
   String validateInputs() {
-    // Check if the name field is not empty
     if (_nameController.text.isEmpty) {
       return "Preencha o campo nome corretamente";
     }
 
-    // Check if the price field is a valid number and not empty
     if (_priceController.text.isEmpty ||
         double.tryParse(_priceController.text) == null) {
       return "Preencha o campo de preço corretamente.";
     }
 
-    // Check if a valid option type is selected
     if (_transactionType.isEmpty) {
       return "Selecione uma transação para prosseguir.";
     }
 
-    // // Check if a valid value is selected from options
     if (_transactionOption == null || _transactionOption!.isEmpty) {
       return "Selecione uma categoria para prosseguir.";
     }
@@ -65,7 +76,16 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
     return "";
   }
 
-  void onPressSend() {
+  void clearStates() {
+    _priceController.clear();
+    _nameController.clear();
+    setState(() {
+      _transactionType = "";
+      _transactionOption = null;
+    });
+  }
+
+  void onPressSend() async {
     String errorMessage = validateInputs();
     if (errorMessage.isNotEmpty) {
       displayErrorToast(errorMessage);
@@ -75,12 +95,20 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
     DateTime date = DateTime.now();
     EntryPayload entryPayload = EntryPayload(
         title: _nameController.text,
-        value: _priceController.text,
-        category: _transactionOption!,
+        price: _priceController.text,
+        transactionCategory: _transactionOption!,
         date: date,
-        type: _transactionType);
+        transactionType: _transactionType);
 
-    print(entryPayload);
+    try {
+      await EntriesService().addEntry(entryPayload);
+      displayToast("Registro adicionado com sucesso!");
+      clearStates();
+    } catch (e) {
+      print("error add entry: $e");
+      displayErrorToast(
+          "Houve um erro para adicionar o registro, tente novamente!");
+    }
   }
 
   @override
@@ -114,77 +142,9 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                   SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _transactionType = 'income';
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(6),
-                          width: MediaQuery.of(context).size.width * 0.43,
-                          decoration: BoxDecoration(
-                            color: _transactionType == 'income'
-                                ? Colors.green[100]
-                                : Colors.transparent,
-                            border: Border.all(
-                                width: 0.3, color: CustomColors().text),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: TextButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _transactionType = 'income';
-                              });
-                            },
-                            icon: CustomMonthColorsCollection()
-                                .buildMonthIcon('Entradas'),
-                            label: Text(
-                              'Income',
-                              style: TextStyle(
-                                  fontSize: 14, color: CustomColors().title),
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _transactionType = 'outcome';
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(6),
-                          width: MediaQuery.of(context).size.width * 0.43,
-                          decoration: BoxDecoration(
-                            color: _transactionType == 'outcome'
-                                ? Colors.red[100]
-                                : Colors.transparent,
-                            border: Border.all(
-                                width: 0.3, color: CustomColors().text),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: TextButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _transactionType = 'outcome';
-                              });
-                            },
-                            icon: CustomMonthColorsCollection()
-                                .buildMonthIcon('Saídas'),
-                            label: Text(
-                              'Outcome',
-                              style: TextStyle(
-                                  fontSize: 14, color: CustomColors().title),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  TransactionTypesRow(
+                      transactionType: _transactionType,
+                      onPressTransactionType: onPressTransactionCategory),
                   SizedBox(
                     height: 20,
                   ),
@@ -212,11 +172,9 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                         Icons.keyboard_arrow_down,
                         size: 28,
                       ),
-                      isExpanded:
-                          true, // Ensures the dropdown menu items occupy the full width.
+                      isExpanded: true,
                       underline: SizedBox(), // Removes the default underline.
-                      dropdownColor: Colors
-                          .white, // Sets the background color of the dropdown items.
+                      dropdownColor: Colors.white,
                       style:
                           TextStyle(color: Colors.black, fontFamily: 'Poppins'),
                     ),
@@ -235,7 +193,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                     onPressed: () {
                       onPressSend();
                     },
-                    child: Text(
+                    child: const Text(
                       "Enviar",
                       style: TextStyle(
                         fontSize: 14,
