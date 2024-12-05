@@ -38,6 +38,7 @@ class EntriesService {
       }
 
       if (entriesData.isNotEmpty) {
+        entriesData.sort((a, b) => b.date.compareTo(a.date));
         return entriesData;
       }
 

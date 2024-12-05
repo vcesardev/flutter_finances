@@ -23,7 +23,6 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _nameController.dispose();
     _priceController.dispose();
@@ -132,20 +131,20 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                       inputController: _nameController,
                       hintText: "Nome",
                       textInputType: TextInputType.text),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   EntryInput(
                       inputController: _priceController,
                       hintText: "Preço",
                       textInputType: TextInputType.number),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   TransactionTypesRow(
                       transactionType: _transactionType,
                       onPressTransactionType: onPressTransactionCategory),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -168,15 +167,16 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                           });
                         }
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.keyboard_arrow_down,
                         size: 28,
                       ),
                       isExpanded: true,
-                      underline: SizedBox(), // Removes the default underline.
+                      underline:
+                          const SizedBox(), // Removes the default underline.
                       dropdownColor: Colors.white,
-                      style:
-                          TextStyle(color: Colors.black, fontFamily: 'Poppins'),
+                      style: const TextStyle(
+                          color: Colors.black, fontFamily: 'Poppins'),
                     ),
                   ),
                 ],

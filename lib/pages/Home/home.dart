@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_finances/config/colors.dart';
-import 'package:flutter_finances/config/entries_collection.dart';
 import 'package:flutter_finances/config/month_data_collection.dart';
 import 'package:flutter_finances/models/entry.dart';
 import 'package:flutter_finances/pages/Home/widgets/EntryListItem/entry_list_item.dart';
@@ -16,24 +14,34 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isLoading = false;
+
   List<Entry> _entries = [];
 
   Future<void> _loadEntries() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       List<Entry> entries = await EntriesService().fetchEntries();
 
-      setState(() {
-        _entries = entries;
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          isLoading = false;
+          _entries = entries;
+        });
       });
     } catch (e) {
       // Handle any errors
+      setState(() {
+        isLoading = false;
+      });
       print("Error fetching entries: $e");
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadEntries();
   }
@@ -43,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 100,
-        leading: Padding(
+        leading: const Padding(
           padding: EdgeInsets.only(left: 15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -67,68 +75,77 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           TextButton(
               onPressed: () {},
-              child: Icon(
+              child: const Icon(
                 Icons.power_settings_new,
                 color: Colors.orange,
               ))
         ],
       ),
-      body: Container(
-        color: CustomColors().gray,
-        child: Column(
-          children: [
-            Container(
-              color: CustomColors().blue,
-              height: 220,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                key: UniqueKey(),
-                children: MonthDataCollection(entries: _entries)
-                    .getMonthData
-                    .map((data) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MonthDataCard(
-                      monthData: data,
+      body: isLoading
+          ? Container(
+              width: MediaQuery.of(context).size.width,
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [CircularProgressIndicator()],
+              ),
+            )
+          : Container(
+              color: CustomColors().gray,
+              child: Column(
+                children: [
+                  Container(
+                    color: CustomColors().blue,
+                    height: 220,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      key: UniqueKey(),
+                      children: MonthDataCollection(entries: _entries)
+                          .getMonthData
+                          .map((data) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: MonthDataCard(
+                            monthData: data,
+                          ),
+                        );
+                      }).toList(), // Converte o resultado do map para uma lista de widgets
                     ),
-                  );
-                }).toList(), // Converte o resultado do map para uma lista de widgets
-              ),
-            ),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Listagem",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: CustomColors().title,
                   ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-                child: ListView(
-                  key: UniqueKey(),
-                  children: _entries.map((item) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: EntryListItem(
-                        entry: item,
+                  const SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Listagem",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: CustomColors().title,
+                        ),
                       ),
-                    );
-                  }).toList(),
-                ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+                      child: ListView(
+                        key: UniqueKey(),
+                        children: _entries.map((item) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: EntryListItem(
+                              entry: item,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
