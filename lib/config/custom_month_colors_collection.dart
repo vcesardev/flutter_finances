@@ -25,9 +25,9 @@ class CustomMonthColorsCollection {
     final monthColor = _customColors.firstWhere(
       (color) => color.type == type,
       orElse: () => CustomMonthColors(
-        color: Colors.grey, // Cor padrão para tipos desconhecidos
+        color: Colors.grey,
         type: '',
-        icon: Icons.help_outline, // Ícone padrão para tipos desconhecidos
+        icon: Icons.help_outline,
       ),
     );
 

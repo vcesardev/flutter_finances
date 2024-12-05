@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_finances/config/colors.dart';
 import 'package:flutter_finances/config/custom_month_colors_collection.dart';
 import 'package:flutter_finances/config/entry_categories.dart';
+import 'package:flutter_finances/models/entry_payload.dart';
 import 'package:flutter_finances/pages/AddEntry/widgets/Input/input.dart';
 import 'package:flutter_finances/utils/masks.dart';
 
@@ -15,8 +16,8 @@ class AddEntryScreen extends StatefulWidget {
 }
 
 class _AddEntryScreenState extends State<AddEntryScreen> {
-  String? _selectedValue;
-  String? _selectedOption;
+  String? _transactionOption;
+  String _transactionType = "";
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
@@ -27,6 +28,59 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
     super.dispose();
     _nameController.dispose();
     _priceController.dispose();
+  }
+
+  void displayErrorToast(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+        backgroundColor: CustomColors().blue,
+      ),
+    );
+  }
+
+  String validateInputs() {
+    // Check if the name field is not empty
+    if (_nameController.text.isEmpty) {
+      return "Preencha o campo nome corretamente";
+    }
+
+    // Check if the price field is a valid number and not empty
+    if (_priceController.text.isEmpty ||
+        double.tryParse(_priceController.text) == null) {
+      return "Preencha o campo de preço corretamente.";
+    }
+
+    // Check if a valid option type is selected
+    if (_transactionType.isEmpty) {
+      return "Selecione uma transação para prosseguir.";
+    }
+
+    // // Check if a valid value is selected from options
+    if (_transactionOption == null || _transactionOption!.isEmpty) {
+      return "Selecione uma categoria para prosseguir.";
+    }
+
+    return "";
+  }
+
+  void onPressSend() {
+    String errorMessage = validateInputs();
+    if (errorMessage.isNotEmpty) {
+      displayErrorToast(errorMessage);
+      return;
+    }
+
+    DateTime date = DateTime.now();
+    EntryPayload entryPayload = EntryPayload(
+        title: _nameController.text,
+        value: _priceController.text,
+        category: _transactionOption!,
+        date: date,
+        type: _transactionType);
+
+    print(entryPayload);
   }
 
   @override
@@ -66,14 +120,14 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                       InkWell(
                         onTap: () {
                           setState(() {
-                            _selectedOption = 'income';
+                            _transactionType = 'income';
                           });
                         },
                         child: Container(
                           padding: EdgeInsets.all(6),
                           width: MediaQuery.of(context).size.width * 0.43,
                           decoration: BoxDecoration(
-                            color: _selectedOption == 'income'
+                            color: _transactionType == 'income'
                                 ? Colors.green[100]
                                 : Colors.transparent,
                             border: Border.all(
@@ -83,7 +137,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                           child: TextButton.icon(
                             onPressed: () {
                               setState(() {
-                                _selectedOption = 'income';
+                                _transactionType = 'income';
                               });
                             },
                             icon: CustomMonthColorsCollection()
@@ -99,14 +153,14 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                       InkWell(
                         onTap: () {
                           setState(() {
-                            _selectedOption = 'outcome';
+                            _transactionType = 'outcome';
                           });
                         },
                         child: Container(
                           padding: EdgeInsets.all(6),
                           width: MediaQuery.of(context).size.width * 0.43,
                           decoration: BoxDecoration(
-                            color: _selectedOption == 'outcome'
+                            color: _transactionType == 'outcome'
                                 ? Colors.red[100]
                                 : Colors.transparent,
                             border: Border.all(
@@ -116,7 +170,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                           child: TextButton.icon(
                             onPressed: () {
                               setState(() {
-                                _selectedOption = 'outcome';
+                                _transactionType = 'outcome';
                               });
                             },
                             icon: CustomMonthColorsCollection()
@@ -144,13 +198,15 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                     width: double
                         .infinity, // This makes the dropdown occupy the full width of the parent container.
                     child: DropdownButton<String>(
-                      value: _selectedValue,
+                      value: _transactionOption,
                       hint: Text('Categorias'),
                       items: EntryCategoriesCollection().getEntryCategories,
                       onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedValue = newValue;
-                        });
+                        if (newValue != null && newValue.isNotEmpty) {
+                          setState(() {
+                            _transactionOption = newValue;
+                          });
+                        }
                       },
                       icon: Icon(
                         Icons.keyboard_arrow_down,
@@ -176,7 +232,9 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      onPressSend();
+                    },
                     child: Text(
                       "Enviar",
                       style: TextStyle(
