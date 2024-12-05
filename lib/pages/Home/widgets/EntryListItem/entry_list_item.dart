@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finances/config/colors.dart';
+import 'package:flutter_finances/config/icon_parser.dart';
 import 'package:flutter_finances/models/entry.dart';
 import 'package:flutter_finances/utils/masks.dart';
 
@@ -31,9 +32,9 @@ class EntryListItem extends StatelessWidget {
                   style: TextStyle(fontSize: 14, color: CustomColors().title),
                 ),
                 Text(
-                  Masks().formatValueToCurrency(entry.value),
+                  Masks().formatValueToCurrency(double.parse(entry.price)),
                   style: TextStyle(
-                      color: entry.type == 'income'
+                      color: entry.transactionType == 'income'
                           ? CustomColors().green
                           : CustomColors().red,
                       fontSize: 20),
@@ -46,21 +47,21 @@ class EntryListItem extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      entry.icon,
+                      IconParser().fetchIcon(entry.transactionCategory),
                       color: CustomColors().text,
                     ),
                     SizedBox(
                       width: 4,
                     ),
                     Text(
-                      entry.category,
+                      IconParser().fetchCategory(entry.transactionCategory),
                       style:
                           TextStyle(color: CustomColors().text, fontSize: 14),
                     ),
                   ],
                 ),
                 Text(
-                  entry.date,
+                  Masks().formatDateTime(entry.date),
                   style: TextStyle(color: CustomColors().text, fontSize: 14),
                 ),
               ],

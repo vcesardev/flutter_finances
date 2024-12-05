@@ -3,8 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_finances/config/colors.dart';
 import 'package:flutter_finances/config/entries_collection.dart';
 import 'package:flutter_finances/config/month_data_collection.dart';
+import 'package:flutter_finances/models/entry.dart';
 import 'package:flutter_finances/pages/Home/widgets/EntryListItem/entry_list_item.dart';
 import 'package:flutter_finances/pages/Home/widgets/MonthDataCard/month_data_card.dart';
+import 'package:flutter_finances/services/entries.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,19 +16,53 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Entry> _entries = [];
+
+  Future<void> _loadEntries() async {
+    try {
+      List<Entry> entries = await EntriesService().fetchEntries();
+
+      setState(() {
+        _entries = entries;
+      });
+    } catch (e) {
+      // Handle any errors
+      print("Error fetching entries: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadEntries();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Olá,", style: TextStyle(fontSize: 18)),
-            Text(
-              "Vitor",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-            )
-          ],
+        leadingWidth: 100,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Olá,",
+                style: TextStyle(fontSize: 18, color: Colors.white),
+                textAlign: TextAlign.start,
+              ),
+              Text(
+                "Vitor",
+                style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                    color: Colors.white),
+              )
+            ],
+          ),
         ),
         actions: [
           TextButton(
@@ -47,7 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 key: UniqueKey(),
-                children: MonthDataCollection().getMonthData.map((data) {
+                children: MonthDataCollection(entries: _entries)
+                    .getMonthData
+                    .map((data) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: MonthDataCard(
@@ -77,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
                 child: ListView(
                   key: UniqueKey(),
-                  children: EntryCollection().getEntries.map((item) {
+                  children: _entries.map((item) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: EntryListItem(

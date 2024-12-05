@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class EntryPayload {
   String title;
-  String value;
-  String category;
+  String price;
+  String transactionCategory;
   DateTime date;
-  String type;
+  String transactionType;
 
   EntryPayload(
       {required this.title,
-      required this.value,
-      required this.category,
+      required this.price,
+      required this.transactionCategory,
       required this.date,
-      required this.type});
+      required this.transactionType});
 }
