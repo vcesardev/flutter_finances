@@ -114,18 +114,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 15),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Listagem",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: CustomColors().title,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Listagem",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: CustomColors().title,
+                          ),
                         ),
-                      ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.calendar_month,
+                            ))
+                      ],
                     ),
                   ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  //   child: Align(
+                  //     alignment: Alignment.centerLeft,
+                  //     child: Text(
+                  //       "Listagem",
+                  //       style: TextStyle(
+                  //         fontSize: 16,
+                  //         color: CustomColors().title,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(height: 10),
                   Expanded(
                     child: Padding(
