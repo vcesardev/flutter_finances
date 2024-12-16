@@ -15,15 +15,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = false;
+  DateTime _selectedDate = DateTime(0);
 
   List<Entry> _entries = [];
 
-  Future<void> _loadEntries() async {
+  Future<void> _loadEntries(DateTime datetime) async {
     setState(() {
       isLoading = true;
     });
     try {
-      List<Entry> entries = await EntriesService().fetchEntries();
+      List<Entry> entries = await EntriesService().fetchEntries(datetime);
 
       Future.delayed(const Duration(seconds: 2), () {
         setState(() {
@@ -43,7 +44,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadEntries();
+    _loadEntries(DateTime.now());
+  }
+
+  Future<void> _pickDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null && pickedDate != _selectedDate) {
+      setState(() {
+        _selectedDate = pickedDate;
+        _loadEntries(pickedDate);
+      });
+    }
   }
 
   @override
@@ -126,10 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.calendar_month,
-                            ))
+                          onPressed: () {
+                            _pickDate(context);
+                          },
+                          icon: Icon(
+                            Icons.calendar_month,
+                          ),
+                        )
                       ],
                     ),
                   ),

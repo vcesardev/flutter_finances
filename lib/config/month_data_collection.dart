@@ -13,16 +13,24 @@ class MonthDataCollection {
       MonthData(
         type: 'Entradas',
         value: EntryCollection().getTotalIncomes(entries),
-        date: Masks().formatDateTime(getMostRecentEntry("income").date),
+        date: entries.isNotEmpty && getMostRecentEntry("income") != null
+            ? Masks().formatDateTime(getMostRecentEntry("income")!.date)
+            : "Sem dados",
       ),
       MonthData(
-          type: 'Saídas',
-          value: EntryCollection().getTotalOutcomes(entries),
-          date: Masks().formatDateTime(getMostRecentEntry("outcome").date)),
+        type: 'Saídas',
+        value: EntryCollection().getTotalOutcomes(entries),
+        date: entries.isNotEmpty && getMostRecentEntry("outcome") != null
+            ? Masks().formatDateTime(getMostRecentEntry("outcome")!.date)
+            : "Sem dados",
+      ),
       MonthData(
-          type: 'Total',
-          value: EntryCollection().getTotalBalance(entries),
-          date: Masks().formatDateTime(entries.first.date)),
+        type: 'Total',
+        value: EntryCollection().getTotalBalance(entries),
+        date: entries.isNotEmpty
+            ? Masks().formatDateTime(entries.first.date)
+            : "Sem dados",
+      ),
     ];
   }
 
@@ -30,9 +38,13 @@ class MonthDataCollection {
     return _monthData;
   }
 
-  Entry getMostRecentEntry(String type) {
+  Entry? getMostRecentEntry(String type) {
     List<Entry> filteredEntries =
         entries.where((entry) => entry.transactionType == type).toList();
+
+    if (filteredEntries.isEmpty) {
+      return null;
+    }
 
     filteredEntries.sort((a, b) => b.date.compareTo(a.date));
 

@@ -43,7 +43,9 @@ class MonthDataCard extends StatelessWidget {
               style: TextStyle(color: CustomColors().title, fontSize: 26),
             ),
             Text(
-              "Última entrada dia ${monthData.date}",
+              monthData.date == "Sem dados"
+                  ? "Não há registros desse tipo"
+                  : "Último registro dia ${monthData.date}",
               style: TextStyle(color: CustomColors().text, fontSize: 12),
             ),
           ],

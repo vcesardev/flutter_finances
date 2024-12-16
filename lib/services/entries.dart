@@ -20,10 +20,19 @@ class EntriesService {
         .catchError((error) => print("Failed to add Entry: $error"));
   }
 
-  Future<List<Entry>> fetchEntries() async {
+  Future<List<Entry>> fetchEntries(DateTime datetime) async {
     List<Entry> entriesData = [];
     try {
-      QuerySnapshot querySnapshot = await entries.get();
+      DateTime startDate = DateTime(
+          datetime.year, datetime.month, 1); // Primeiro dia do mês atual
+      DateTime endDate = DateTime(datetime.year, datetime.month + 1, 1)
+          .subtract(Duration(seconds: 1)); // Último dia do mês atual
+
+      // Consulta com filtro de data
+      QuerySnapshot querySnapshot = await entries
+          .where("date", isGreaterThanOrEqualTo: startDate)
+          .where("date", isLessThanOrEqualTo: endDate)
+          .get();
 
       for (var doc in querySnapshot.docs) {
         Entry data = Entry(
