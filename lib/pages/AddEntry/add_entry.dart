@@ -17,15 +17,18 @@ class AddEntryScreen extends StatefulWidget {
 class _AddEntryScreenState extends State<AddEntryScreen> {
   String? _transactionOption;
   String _transactionType = "";
+  DateTime _selectedDate = DateTime(0);
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     _nameController.dispose();
     _priceController.dispose();
+    _dateController.dispose();
   }
 
   void displayErrorToast(String message) {
@@ -68,6 +71,10 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
       return "Selecione uma transação para prosseguir.";
     }
 
+    if (_selectedDate.year == 0) {
+      return "Selecione uma data para prosseguir.";
+    }
+
     if (_transactionOption == null || _transactionOption!.isEmpty) {
       return "Selecione uma categoria para prosseguir.";
     }
@@ -91,12 +98,11 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
       return;
     }
 
-    DateTime date = DateTime.now();
     EntryPayload entryPayload = EntryPayload(
         title: _nameController.text,
         price: _priceController.text,
         transactionCategory: _transactionOption!,
-        date: date,
+        date: _selectedDate,
         transactionType: _transactionType);
 
     try {
@@ -107,6 +113,23 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
       print("error add entry: $e");
       displayErrorToast(
           "Houve um erro para adicionar o registro, tente novamente!");
+    }
+  }
+
+  Future<void> _pickDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000), // Data mínima
+      lastDate: DateTime(2100), // Data máxima
+    );
+
+    if (pickedDate != null && pickedDate != _selectedDate) {
+      setState(() {
+        _selectedDate = pickedDate;
+        _dateController.text =
+            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+      });
     }
   }
 
@@ -129,6 +152,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                 children: [
                   EntryInput(
                       inputController: _nameController,
+                      enabled: true,
                       hintText: "Nome",
                       textInputType: TextInputType.text),
                   const SizedBox(
@@ -136,8 +160,22 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                   ),
                   EntryInput(
                       inputController: _priceController,
+                      enabled: true,
                       hintText: "Preço",
                       textInputType: TextInputType.number),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _pickDate(context);
+                    },
+                    child: EntryInput(
+                        inputController: _dateController,
+                        enabled: false,
+                        hintText: "Data",
+                        textInputType: TextInputType.text),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),

@@ -5,12 +5,14 @@ class EntryInput extends StatefulWidget {
   const EntryInput(
       {super.key,
       required this.inputController,
+      required this.enabled,
       required this.hintText,
       required this.textInputType});
 
   final TextEditingController inputController;
   final String hintText;
   final TextInputType? textInputType;
+  final bool enabled;
 
   @override
   State<EntryInput> createState() => _EntryInputState();
@@ -21,13 +23,17 @@ class _EntryInputState extends State<EntryInput> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.inputController,
+      enabled: widget.enabled,
       style: TextStyle(fontSize: 14, color: CustomColors().text),
       keyboardType: widget.textInputType,
       decoration: InputDecoration(
         hintText: widget.hintText,
         fillColor: Colors.white,
         filled: true,
-        hintStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+        hintStyle: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            color: CustomColors().text),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
