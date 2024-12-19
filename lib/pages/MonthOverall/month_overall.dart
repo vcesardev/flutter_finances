@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finances/config/colors.dart';
 import 'package:flutter_finances/models/transaction_category.dart';
+import 'package:flutter_finances/pages/MonthOverall/widgets/month_category.dart';
 import 'package:flutter_finances/provider/entries_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_finances/pages/MonthOverall/widgets/piechart_section.dart';
@@ -22,6 +23,7 @@ class _MonthOverallState extends State<MonthOverall> {
         entriesProvider.getTransactionCountForSpecificCategories();
     final entriesTotalAmount = entriesProvider.getEntries.length;
     TransactionCategoryCount data = TransactionCategoryCount.fromMap(chartData);
+    final categoriesSum = entriesProvider.getOverallCategoriesSum();
 
     return Scaffold(
       appBar: AppBar(
@@ -42,6 +44,19 @@ class _MonthOverallState extends State<MonthOverall> {
                   height: 300,
                   child: PiechartSection(
                       data: data, entriesTotalAmount: entriesTotalAmount),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: ListView(
+                    key: UniqueKey(),
+                    children: categoriesSum.map((category) {
+                      return MonthCategory(
+                        category: category,
+                      );
+                    }).toList(),
+                  ),
                 )
               ],
             ),

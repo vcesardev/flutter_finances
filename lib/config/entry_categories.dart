@@ -59,7 +59,7 @@ class EntryCategoriesCollection {
         children: <Widget>[
           Icon(Icons.shopping_bag, color: CustomColors().text),
           SizedBox(width: 10),
-          Text('Aleatório'),
+          Text('Outros'),
         ],
       ),
     ),
