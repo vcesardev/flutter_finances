@@ -6,7 +6,7 @@ class IconParser {
     IconInfo(icon: Icons.attach_money, value: "vendas", title: "Vendas"),
     IconInfo(
         icon: Icons.restaurant, value: "alimentacao", title: "Alimentação"),
-    IconInfo(icon: Icons.home, value: "despesas", title: "Despesas"),
+    IconInfo(icon: Icons.home, value: "contas", title: "Contas"),
     IconInfo(
         icon: Icons.celebration,
         value: "entretenimento",

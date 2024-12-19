@@ -8,11 +8,23 @@ class Entry {
   String transactionType;
   String id;
 
-  Entry(
-      {required this.title,
-      required this.price,
-      required this.transactionCategory,
-      required this.date,
-      required this.transactionType,
-      required this.id});
+  Entry({
+    required this.title,
+    required this.price,
+    required this.transactionCategory,
+    required this.date,
+    required this.transactionType,
+    required this.id,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'price': price,
+      'transactionCategory': transactionCategory,
+      'date': date.toIso8601String(),
+      'transactionType': transactionType,
+      'id': id,
+    };
+  }
 }

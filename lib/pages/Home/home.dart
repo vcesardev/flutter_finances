@@ -4,7 +4,9 @@ import 'package:flutter_finances/config/month_data_collection.dart';
 import 'package:flutter_finances/models/entry.dart';
 import 'package:flutter_finances/pages/Home/widgets/EntryListItem/entry_list_item.dart';
 import 'package:flutter_finances/pages/Home/widgets/MonthDataCard/month_data_card.dart';
+import 'package:flutter_finances/provider/entries_provider.dart';
 import 'package:flutter_finances/services/entries.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,7 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Entry> _entries = [];
 
-  Future<void> _loadEntries(DateTime datetime) async {
+  Future<void> _loadEntries(DateTime datetime, BuildContext context) async {
+    final entriesProvider =
+        Provider.of<EntriesProvider>(context, listen: false);
     setState(() {
       isLoading = true;
     });
@@ -27,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       List<Entry> entries = await EntriesService().fetchEntries(datetime);
 
       Future.delayed(const Duration(seconds: 2), () {
+        entriesProvider.setEntries(entries);
         setState(() {
           isLoading = false;
           _entries = entries;
@@ -44,7 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadEntries(DateTime.now());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Access context here
+      _loadEntries(
+        DateTime.now(),
+        context,
+      );
+    });
   }
 
   Future<void> _pickDate(BuildContext context) async {
@@ -58,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
         _selectedDate = pickedDate;
-        _loadEntries(pickedDate);
+        _loadEntries(pickedDate, context);
       });
     }
   }

@@ -24,12 +24,12 @@ class EntryCategoriesCollection {
       ),
     ),
     DropdownMenuItem(
-      value: 'despesas',
+      value: 'contas',
       child: Row(
         children: <Widget>[
           Icon(Icons.home, color: CustomColors().text),
           SizedBox(width: 10),
-          Text('Despesas'),
+          Text('Contas'),
         ],
       ),
     ),
