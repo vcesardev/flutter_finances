@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_finances/pages/MonthOverall/month_overall.dart';
 import 'package:flutter_finances/provider/entries_provider.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
           titleTextStyle: TextStyle(
               color: Colors.white,
               fontFamily: 'Poppins',
+              fontSize: 16,
               fontWeight: FontWeight.w400),
         ),
       ),
@@ -61,6 +63,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => HomeScreen(),
         '/addEntry': (context) => AddEntryScreen(),
+        '/monthOverall': (context) => MonthOverall(),
       },
     );
   }

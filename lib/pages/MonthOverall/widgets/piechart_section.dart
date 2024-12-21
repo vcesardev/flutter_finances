@@ -4,14 +4,15 @@ import 'package:flutter_finances/models/transaction_category.dart';
 
 class PiechartSection extends StatelessWidget {
   const PiechartSection(
-      {super.key, required this.data, required this.entriesTotalAmount});
+      {super.key, required this.data, required this.entriesTotalOutcomePrice});
   final TransactionCategoryCount data;
-  final int entriesTotalAmount;
+  final double entriesTotalOutcomePrice;
 
   @override
   Widget build(BuildContext context) {
-    String convertValueToPercentage(int value) {
-      final data = ((value / entriesTotalAmount) * 100).toStringAsFixed((2));
+    String convertValueToPercentage(double value) {
+      final data =
+          ((value / entriesTotalOutcomePrice) * 100).toStringAsFixed((2));
       return data;
     }
 
@@ -24,7 +25,7 @@ class PiechartSection extends StatelessWidget {
             value: data.vendas.toDouble(),
             title: "${convertValueToPercentage(data.vendas)}%",
             radius: 60,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
                 fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           PieChartSectionData(
@@ -32,7 +33,7 @@ class PiechartSection extends StatelessWidget {
             value: data.alimentacao.toDouble(),
             title: "${convertValueToPercentage(data.alimentacao)}%",
             radius: 60,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
                 fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           PieChartSectionData(
@@ -40,7 +41,7 @@ class PiechartSection extends StatelessWidget {
             value: data.contas.toDouble(),
             title: "${convertValueToPercentage(data.contas)}%",
             radius: 60,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
                 fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           PieChartSectionData(
@@ -48,7 +49,7 @@ class PiechartSection extends StatelessWidget {
             value: data.entretenimento.toDouble(),
             title: "${convertValueToPercentage(data.entretenimento)}%",
             radius: 60,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
                 fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           PieChartSectionData(
@@ -56,7 +57,7 @@ class PiechartSection extends StatelessWidget {
             value: data.roupas.toDouble(),
             title: "${convertValueToPercentage(data.roupas)}%",
             radius: 60,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
                 fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           PieChartSectionData(
@@ -64,12 +65,12 @@ class PiechartSection extends StatelessWidget {
             value: data.aleatorio.toDouble(),
             title: "${convertValueToPercentage(data.aleatorio)}%",
             radius: 60,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
                 fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ],
       ),
-      duration: Duration(seconds: 10), // Optional
+      duration: const Duration(seconds: 10), // Optional
       curve: Curves.linear, // Optional
     );
   }

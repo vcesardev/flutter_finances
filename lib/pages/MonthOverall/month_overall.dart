@@ -21,9 +21,10 @@ class _MonthOverallState extends State<MonthOverall> {
 
     final chartData =
         entriesProvider.getTransactionCountForSpecificCategories();
-    final entriesTotalAmount = entriesProvider.getEntries.length;
     TransactionCategoryCount data = TransactionCategoryCount.fromMap(chartData);
     final categoriesSum = entriesProvider.getOverallCategoriesSum();
+
+    double totalOutcomePrice = entriesProvider.getOutcomeTotalPrice;
 
     return Scaffold(
       appBar: AppBar(
@@ -32,10 +33,10 @@ class _MonthOverallState extends State<MonthOverall> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 100, 16, 100),
           color: CustomColors().gray,
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).size.height * 0.82,
           child: Expanded(
             child: Column(
               children: [
@@ -43,7 +44,7 @@ class _MonthOverallState extends State<MonthOverall> {
                   width: 300,
                   height: 300,
                   child: PiechartSection(
-                      data: data, entriesTotalAmount: entriesTotalAmount),
+                      data: data, entriesTotalOutcomePrice: totalOutcomePrice),
                 ),
                 SizedBox(
                   height: 20,

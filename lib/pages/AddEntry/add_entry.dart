@@ -143,7 +143,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height * 0.82,
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 50),
           color: CustomColors().gray,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,6 +221,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
               ),
               SizedBox(
                   width: MediaQuery.of(context).size.width,
+                  height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,

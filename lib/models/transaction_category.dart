@@ -1,10 +1,10 @@
 class TransactionCategoryCount {
-  final int vendas;
-  final int alimentacao;
-  final int contas;
-  final int entretenimento;
-  final int roupas;
-  final int aleatorio;
+  final double vendas;
+  final double alimentacao;
+  final double contas;
+  final double entretenimento;
+  final double roupas;
+  final double aleatorio;
 
   TransactionCategoryCount({
     required this.vendas,
@@ -15,7 +15,7 @@ class TransactionCategoryCount {
     required this.aleatorio,
   });
 
-  factory TransactionCategoryCount.fromMap(Map<String, int> map) {
+  factory TransactionCategoryCount.fromMap(Map<String, double> map) {
     return TransactionCategoryCount(
       vendas: map['vendas'] ?? 0,
       alimentacao: map['alimentacao'] ?? 0,

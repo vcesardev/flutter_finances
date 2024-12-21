@@ -1,16 +1,72 @@
-# flutter_finances
 
-A new Flutter project.
+# Flutter Finances
 
-## Getting Started
+Um projeto de estudo utilizando Flutter & Firebase.
 
-This project is a starting point for a Flutter application.
+## Descrição do projeto
 
-A few resources to get you started if this is your first Flutter project:
+O Flutter Finances é um projeto de estudos desenvolvido para explorar os conceitos e práticas do Flutter, como gestão de estado, design responsivo e manipulação de dados, nele o usuário pode:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Cadastro de transações:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Controle de entradas (receitas) e saídas (despesas).
+
+* Divisão por categorias personalizadas.
+
+### Resumos financeiros:
+
+* Visão total de entradas e saídas.
+
+* Cálculo automático do saldo mensal.
+
+* Resumo gráfico dos gastos mensais por categoria.
+
+### Visualizações:
+
+* Gráfico de pizza ilustrando a proporção de gastos por categoria.
+
+* Listagem detalhada de transações agrupadas por categoria.
+
+
+## Tecnologias utilizadas:
+
+- Flutter: Framework utilizado para o desenvolvimento do aplicativo.
+
+- Firebase: Plataforma utilizada para armazenamento dos dados e sincronização em tempo real.
+
+- Provider: Framework de gerenciamento de estado global na aplicação.
+
+- FL Chart: Utilizado para a criação de gráficos de resumo.
+
+
+## Rodando localmente
+
+Clone o projeto
+
+```bash
+  git clone https://github.com/vcesardev/flutter_finances.git
+```
+
+Entre no diretório do projeto
+
+```bash
+  cd flutter_finances
+```
+
+Instale as dependências
+
+```bash
+  flutter pub get
+```
+
+Inicie o servidor
+
+```bash
+  flutter run
+```
+
+
+## Licença
+
+Este projeto é para fins educativos e não possui uma licença oficial.
+

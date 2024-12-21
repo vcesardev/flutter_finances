@@ -25,7 +25,7 @@ class TransactionTypesRow extends StatelessWidget {
             onPressTransaction("income");
           },
           child: Container(
-            padding: EdgeInsets.all(6),
+            padding: const EdgeInsets.all(6),
             width: MediaQuery.of(context).size.width * 0.43,
             decoration: BoxDecoration(
               color: transactionType == 'income'
@@ -40,7 +40,7 @@ class TransactionTypesRow extends StatelessWidget {
               },
               icon: CustomMonthColorsCollection().buildMonthIcon('Entradas'),
               label: Text(
-                'Income',
+                'Entrada',
                 style: TextStyle(fontSize: 14, color: CustomColors().title),
               ),
             ),
@@ -66,7 +66,7 @@ class TransactionTypesRow extends StatelessWidget {
               },
               icon: CustomMonthColorsCollection().buildMonthIcon('Saídas'),
               label: Text(
-                'Outcome',
+                'Saída',
                 style: TextStyle(fontSize: 14, color: CustomColors().title),
               ),
             ),
