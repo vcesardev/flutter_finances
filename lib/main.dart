@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_finances/pages/Login/login.dart';
 import 'package:flutter_finances/pages/MonthOverall/month_overall.dart';
 import 'package:flutter_finances/provider/entries_provider.dart';
 import 'firebase_options.dart';
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w400),
         ),
       ),
-      home: App(),
+      home: Login(),
       routes: {
         '/home': (context) => HomeScreen(),
         '/addEntry': (context) => AddEntryScreen(),

@@ -7,4 +7,5 @@ class CustomColors {
   Color title = Color(0xFF363F5F);
   Color text = Color(0xFF969CB2);
   Color red = Color(0xFFE83F5B);
+  Color background = Color(0xFFF0F2F5);
 }
