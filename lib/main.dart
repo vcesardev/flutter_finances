@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_finances/pages/Login/login.dart';
 import 'package:flutter_finances/pages/MonthOverall/month_overall.dart';
 import 'package:flutter_finances/provider/entries_provider.dart';
+import 'package:flutter_finances/provider/user_provider.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +18,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ChangeNotifierProvider(
-    create: (context) => EntriesProvider(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => EntriesProvider()),
+      ChangeNotifierProvider(create: (context) => UserProvider())
+    ],
     child: const MyApp(),
   ));
 }
@@ -29,28 +33,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final userData = userProvider.getUserData;
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         fontFamily: 'Poppins',
-
         appBarTheme: AppBarTheme(
           backgroundColor: CustomColors().blue,
           titleTextStyle: TextStyle(
@@ -60,7 +50,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w400),
         ),
       ),
-      home: Login(),
+      home: userData != null ? App() : Login(),
       routes: {
         '/home': (context) => HomeScreen(),
         '/addEntry': (context) => AddEntryScreen(),

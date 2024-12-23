@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finances/config/colors.dart';
 import 'package:flutter_finances/config/month_data_collection.dart';
 import 'package:flutter_finances/models/entry.dart';
+import 'package:flutter_finances/models/user.dart';
 import 'package:flutter_finances/pages/Home/widgets/EntryListItem/entry_list_item.dart';
 import 'package:flutter_finances/pages/Home/widgets/MonthDataCard/month_data_card.dart';
 import 'package:flutter_finances/provider/entries_provider.dart';
+import 'package:flutter_finances/provider/user_provider.dart';
 import 'package:flutter_finances/services/entries.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadEntries(DateTime datetime, BuildContext context) async {
     final entriesProvider =
         Provider.of<EntriesProvider>(context, listen: false);
+
     setState(() {
       isLoading = true;
     });
@@ -76,23 +79,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    final UserModel userData = userProvider.getUserData;
+
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 100,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 15),
+        leadingWidth: 130,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "Olá,",
                 style: TextStyle(fontSize: 18, color: Colors.white),
                 textAlign: TextAlign.start,
               ),
               Text(
-                "Vitor",
-                style: TextStyle(
+                userData.name,
+                style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
                     color: Colors.white),
@@ -102,7 +109,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                userProvider.logoutUser();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Usuário desconectado com sucesso!"),
+                    duration: Duration(seconds: 3),
+                    backgroundColor: CustomColors().blue,
+                  ),
+                );
+              },
               child: const Icon(
                 Icons.power_settings_new,
                 color: Colors.orange,

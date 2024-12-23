@@ -1,7 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finances/config/colors.dart';
+import 'package:flutter_finances/models/user.dart';
+import 'package:flutter_finances/provider/entries_provider.dart';
+import 'package:flutter_finances/provider/user_provider.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -11,6 +17,53 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  Future<void> signInWithGoogle(BuildContext context) async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final UserModel user = UserModel(
+        email: userCredential.user?.email ?? '',
+        name: userCredential.user?.displayName ?? '',
+        id: userCredential.user?.uid ?? '',
+        photoUrl: userCredential.user?.photoURL ?? '',
+      );
+
+      Provider.of<UserProvider>(context, listen: false).setUser(user);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Login feito com sucesso!"),
+          duration: Duration(seconds: 3),
+          backgroundColor: CustomColors().blue,
+        ),
+      );
+    } catch (e) {
+      print('Erro no login: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Houve um erro ao tentar fazer o login!"),
+          duration: Duration(seconds: 3),
+          backgroundColor: CustomColors().red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +83,6 @@ class _LoginState extends State<Login> {
                 children: [
                   Lottie.asset('assets/animations/finances-animation.json',
                       height: 250, width: 250),
-                  SvgPicture.asset('assets/icons/coins-icon.svg',
-                      width: 36, height: 36),
                   const SizedBox(
                     height: 5,
                   ),
@@ -81,7 +132,7 @@ class _LoginState extends State<Login> {
                         ),
                         backgroundColor: Colors.white),
                     onPressed: () {
-                      // Ação do botão
+                      signInWithGoogle(context);
                     },
                     child: Row(
                       mainAxisSize:
