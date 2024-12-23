@@ -5,16 +5,19 @@ import 'package:flutter_finances/models/entry.dart';
 import 'package:flutter_finances/utils/masks.dart';
 
 class EntryListItem extends StatelessWidget {
-  const EntryListItem({super.key, required this.entry});
+  const EntryListItem(
+      {super.key, required this.entry, required this.onPressDelete});
 
   final Entry entry;
+
+  final Function onPressDelete;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 128,
+        height: 140,
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(14),
+        padding: EdgeInsets.all(10),
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
@@ -27,9 +30,20 @@ class EntryListItem extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  entry.title,
-                  style: TextStyle(fontSize: 14, color: CustomColors().title),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      entry.title,
+                      style:
+                          TextStyle(fontSize: 14, color: CustomColors().title),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          onPressDelete();
+                        },
+                        icon: Icon(Icons.delete_outline))
+                  ],
                 ),
                 Text(
                   Masks().formatValueToCurrency(double.parse(entry.price)),

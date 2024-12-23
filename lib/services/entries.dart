@@ -59,4 +59,13 @@ class EntriesService {
       throw Exception("Failed to fetch entries: $error");
     }
   }
+
+  Future<void> deleteEntry(String entryId) async {
+    try {
+      await entries.doc(entryId).delete();
+      print("Entry delete successfully");
+    } catch (e) {
+      throw Exception("Failed to delete entry: $e");
+    }
+  }
 }

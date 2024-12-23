@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = false;
-  DateTime _selectedDate = DateTime(0);
+  DateTime _selectedDate = DateTime.now();
 
   List<Entry> _entries = [];
 
@@ -78,6 +78,60 @@ class _HomeScreenState extends State<HomeScreen> {
         _loadEntries(pickedDate, context);
       });
     }
+  }
+
+  Future<void> deleteEntryData(String entryId) async {
+    try {
+      await EntriesService().deleteEntry(entryId);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Registro deletado com sucesso!"),
+          duration: Duration(seconds: 3),
+          backgroundColor: CustomColors().red,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text("Erro ao deletar registro, tente novamente mais tarde!"),
+          duration: Duration(seconds: 3),
+          backgroundColor: CustomColors().red,
+        ),
+      );
+      print(e);
+    }
+  }
+
+  void showDeleteDialog(BuildContext context, String entryId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Deletar registro"),
+          content: Text("Gostaria de deletar este registro?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () {
+                deleteEntryData(entryId);
+                _loadEntries(
+                  _selectedDate,
+                  context,
+                );
+                Navigator.of(context).pop();
+              },
+              child: Text("Confirmar"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -183,19 +237,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  //   child: Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Text(
-                  //       "Listagem",
-                  //       style: TextStyle(
-                  //         fontSize: 16,
-                  //         color: CustomColors().title,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   const SizedBox(height: 10),
                   Expanded(
                     child: Padding(
@@ -207,6 +248,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: EntryListItem(
                               entry: item,
+                              onPressDelete: () {
+                                showDeleteDialog(context, item.id);
+                              },
                             ),
                           );
                         }).toList(),
