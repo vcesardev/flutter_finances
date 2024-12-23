@@ -239,20 +239,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-                      child: ListView(
-                        key: UniqueKey(),
-                        children: _entries.map((item) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: EntryListItem(
-                              entry: item,
-                              onPressDelete: () {
-                                showDeleteDialog(context, item.id);
-                              },
+                      child: _entries.isEmpty
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.6,
+                                  child: Text(
+                                    "Nenhum registro para ser exibido, adicione um na tela de cadastro!",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: CustomColors().title),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : ListView(
+                              key: UniqueKey(),
+                              children: _entries.map((item) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: EntryListItem(
+                                    entry: item,
+                                    onPressDelete: () {
+                                      showDeleteDialog(context, item.id);
+                                    },
+                                  ),
+                                );
+                              }).toList(),
                             ),
-                          );
-                        }).toList(),
-                      ),
                     ),
                   ),
                 ],
