@@ -135,25 +135,22 @@ class _LoginState extends State<Login> {
                       signInWithGoogle(context);
                     },
                     child: Row(
-                      mainAxisSize:
-                          MainAxisSize.min, // Ajusta o tamanho ao conteúdo
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         SvgPicture.asset('assets/icons/google-icon.svg',
-                            width: 24, height: 24), // Ícone
-                        const SizedBox(
-                            width: 8), // Espaçamento entre o ícone e o traço
+                            width: 24, height: 24),
+                        const SizedBox(width: 8),
                         Container(
-                          width: 1, // Largura do traço vertical
-                          height: 24, // Altura do traço vertical
-                          color: CustomColors().background, // Cor do traço
+                          width: 1,
+                          height: 24,
+                          color: CustomColors().background,
                         ),
-                        const SizedBox(
-                            width: 30), // Espaçamento entre o traço e o texto
+                        const SizedBox(width: 30),
                         Text(
                           "Entrar com Google",
                           style: TextStyle(
                               color: CustomColors().title, fontSize: 16),
-                        ), // Texto
+                        ),
                       ],
                     ),
                   ),

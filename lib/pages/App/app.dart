@@ -13,9 +13,9 @@ class _AppState extends State<App> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(), // Replace with your actual home page widget
+    HomeScreen(),
     AddEntryScreen(),
-    MonthOverall() // Replace with your actual add entry screen widget
+    MonthOverall()
   ];
 
   void _onItemTapped(int index) {

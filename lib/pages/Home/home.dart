@@ -44,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       });
     } catch (e) {
-      // Handle any errors
       setState(() {
         isLoading = false;
       });
@@ -56,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Access context here
       _loadEntries(
         DateTime.now(),
         context,

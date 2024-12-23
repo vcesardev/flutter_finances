@@ -70,8 +70,8 @@ class PiechartSection extends StatelessWidget {
           ),
         ],
       ),
-      duration: const Duration(seconds: 10), // Optional
-      curve: Curves.linear, // Optional
+      duration: const Duration(seconds: 10),
+      curve: Curves.linear,
     );
   }
 }
