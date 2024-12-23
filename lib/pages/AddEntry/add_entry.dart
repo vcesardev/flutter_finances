@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finances/config/colors.dart';
 import 'package:flutter_finances/config/entry_categories.dart';
 import 'package:flutter_finances/models/entry_payload.dart';
+import 'package:flutter_finances/models/user.dart';
 import 'package:flutter_finances/pages/AddEntry/widgets/Input/input.dart';
 import 'package:flutter_finances/pages/AddEntry/widgets/TransactionTypes/transaction_types.dart';
+import 'package:flutter_finances/provider/user_provider.dart';
 import 'package:flutter_finances/services/entries.dart';
+import 'package:provider/provider.dart';
 
 class AddEntryScreen extends StatefulWidget {
   const AddEntryScreen({super.key});
@@ -91,7 +94,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
     });
   }
 
-  void onPressSend() async {
+  void onPressSend(String userId) async {
     String errorMessage = validateInputs();
     if (errorMessage.isNotEmpty) {
       displayErrorToast(errorMessage);
@@ -99,6 +102,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
     }
 
     EntryPayload entryPayload = EntryPayload(
+        userId: userId,
         title: _nameController.text,
         price: _priceController.text,
         transactionCategory: _transactionOption!,
@@ -135,6 +139,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final UserModel userData = Provider.of<UserProvider>(context).getUserData;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -230,7 +235,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                       ),
                     ),
                     onPressed: () {
-                      onPressSend();
+                      onPressSend(userData.id);
                     },
                     child: const Text(
                       "Enviar",

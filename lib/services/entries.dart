@@ -15,12 +15,13 @@ class EntriesService {
           "title": data.title,
           "transactionCategory": data.transactionCategory,
           "transactionType": data.transactionType,
+          "userId": data.userId,
         })
         .then((value) => print("Entry Added"))
         .catchError((error) => print("Failed to add Entry: $error"));
   }
 
-  Future<List<Entry>> fetchEntries(DateTime datetime) async {
+  Future<List<Entry>> fetchEntries(DateTime datetime, String userId) async {
     List<Entry> entriesData = [];
     try {
       DateTime startDate = DateTime(
@@ -32,11 +33,13 @@ class EntriesService {
       QuerySnapshot querySnapshot = await entries
           .where("date", isGreaterThanOrEqualTo: startDate)
           .where("date", isLessThanOrEqualTo: endDate)
+          .where("userId", isEqualTo: userId)
           .get();
 
       for (var doc in querySnapshot.docs) {
         Entry data = Entry(
           title: doc["title"],
+          userId: doc["userId"],
           price: doc["price"],
           transactionCategory: doc["transactionCategory"],
           date: (doc["date"] as Timestamp).toDate(),

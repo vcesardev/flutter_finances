@@ -26,12 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadEntries(DateTime datetime, BuildContext context) async {
     final entriesProvider =
         Provider.of<EntriesProvider>(context, listen: false);
+    final UserModel userData =
+        Provider.of<UserProvider>(context, listen: false).getUserData;
 
     setState(() {
       isLoading = true;
     });
     try {
-      List<Entry> entries = await EntriesService().fetchEntries(datetime);
+      List<Entry> entries =
+          await EntriesService().fetchEntries(datetime, userData.id);
 
       Future.delayed(const Duration(seconds: 2), () {
         entriesProvider.setEntries(entries);

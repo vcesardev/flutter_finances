@@ -7,15 +7,16 @@ class Entry {
   DateTime date;
   String transactionType;
   String id;
+  String userId;
 
-  Entry({
-    required this.title,
-    required this.price,
-    required this.transactionCategory,
-    required this.date,
-    required this.transactionType,
-    required this.id,
-  });
+  Entry(
+      {required this.title,
+      required this.price,
+      required this.transactionCategory,
+      required this.date,
+      required this.transactionType,
+      required this.id,
+      required this.userId});
 
   Map<String, dynamic> toJson() {
     return {

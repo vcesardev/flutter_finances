@@ -6,9 +6,11 @@ class EntryPayload {
   String transactionCategory;
   DateTime date;
   String transactionType;
+  String userId;
 
   EntryPayload(
       {required this.title,
+      required this.userId,
       required this.price,
       required this.transactionCategory,
       required this.date,
